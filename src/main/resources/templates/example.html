@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+    <h1>타임리프</h1>
+<!--    th:text : innerText 값을 설정하는 타임리프-->
+<!--    #temporals.format : 날짜 데이터를 문자열 데이터로 바꾸는 함수-->
+    <p th:text="${#temporals.format(today, 'yyyy-MM-dd')}"> ㅁㄴㅇㄹ </p>
+<!--    th:object : person 객체를 지정해서 접근, 지정한 태그 안에서 *{} 객체 안의 데이터를 사용 가능 -->
+    <div th:object="${person}">
+      <p th:text="|이름 : *{name}|"> </p>
+      <p th:text="|나이 : *{age}|"> </p>
+      <p> 취미 </p>
+<!--      th:each : 반복문, 자바의 향상된 for문과 사용방법이 같음-->
+<!--      th:each="변수명 : 반복가능한 데이터" -->
+<!--      첫번째 : 운동, 두번째 : 독서 -->
+      <ul th:each="hobby : *{hobbies}">
+        <li th:text="${hobby}"></li>
+<!--        th:if="조건식" : 타임리프의 if문 -->
+        <span th:if="${hobby == '운동'}">(대표 취미)</span>
+      </ul>
+    </div>
+<!--  th:href : uri를 설정에 사용되는 타임리프 -->
+<!--  @{}를 ㅣㅇ용하여 uri를 작성-->
+<!--   중괄호에 괄호안의 id 값을 설정해줌 -->
+    <a th:href="@{/api/articles/{id}(id=${person.id})}">글 보기</a>
+</body>
+</html>

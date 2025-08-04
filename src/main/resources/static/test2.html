@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://api.vworld.kr/req/data?service=data&request=GetFeature&type=jsonp&data=LT_C_ADSIGG_INFO&key=696E63A0-9FC6-36DC-8BAA-9C9E2B6B5384&callback=myCallback&..."></script>
+<script>
+    function myCallback(data) {
+        console.log(data);
+    }
+</script>
+<body>
+
+<select id="sido">
+  <option value="11">서울특별시</option>
+  <option value="41">경기도</option>
+</select>
+
+<select id="sigungu"></select>
+
+<script>
+  document.getElementById("sido").addEventListener("change", function() {
+    const sidoCode = this.value;
+
+    fetch(`https://api.vworld.kr/req/data?service=data&request=GetFeature&type=jsonp&data=LT_C_ADSIGG_INFO&key= 696E63A0-9FC6-36DC-8BAA-9C9E2B6B5384&domain=localhost:8080&attrFilter=sido_cd:=`+ sidoCode)
+            .then(res => res.jsonp())
+            .then(data => {
+              const list = data.response.result.featureCollection.features;
+              const sigunguSelect = document.getElementById("sigungu");
+              sigunguSelect.innerHTML = "";
+              list.forEach(item => {
+                const name = item.properties.sig_kor_nm;
+                const code = item.properties.sig_cd;
+                const option = document.createElement("option");
+                option.value = code;
+                option.innerText = name;
+                sigunguSelect.appendChild(option);
+              });
+            });
+  });
+
+</script>
+</body>
+</html>

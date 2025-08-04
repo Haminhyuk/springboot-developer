@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>시군구 불러오기</title>
+</head>
+<body>
+
+<h3>시도 선택</h3>
+<select id="sido">
+  <option value="11">서울특별시</option>
+  <option value="41">경기도</option>
+</select>
+
+<h3>시군구 선택</h3>
+<select id="sigungu"></select>
+
+<script>
+  document.getElementById("sido").addEventListener("change", function () {
+    const sidoCode = this.value;
+
+    const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&type=jsonp&key=696E63A0-9FC6-36DC-8BAA-9C9E2B6B5384&domain=localhost:8080&data=LT_C_ADSIGG_INFO&attrFilter=sido_cd:=` + sidoCode;
+
+    fetch(url)
+            .then(res => res.json())
+            .then(data => {
+              const list = data.response.result.featureCollection.features;
+              const sigunguSelect = document.getElementById("sigungu");
+              sigunguSelect.innerHTML = ""; // 기존 옵션 제거
+
+              list.forEach(item => {
+                const name = item.properties.sig_kor_nm;
+                const code = item.properties.sig_cd;
+                const option = document.createElement("option");
+                option.value = code;
+                option.innerText = name;
+                sigunguSelect.appendChild(option);
+              });
+            })
+            .catch(err => {
+              console.error("에러 발생:", err);
+              alert("데이터를 불러오는 데 실패했습니다.");
+            });
+  });
+</script>
+
+</body>
+</html>
